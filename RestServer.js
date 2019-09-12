@@ -113,8 +113,8 @@ class RestServer {
   backToRegEx(val) {
     // convert back to reg ex from stringified reg ex
     return new RegExp(
-      val.replace(/\w$/, '').replace(/^\/(.*)\/$/, '$1'),
-      (val.match(/\w$/) || [''])[0]
+      val.replace(/\w*$/, '').replace(/^\/(.*)\/$/, '$1'),
+      val.match(/\w*$/)[0]
     );
   }
 
