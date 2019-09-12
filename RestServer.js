@@ -128,7 +128,7 @@ class RestServer {
       return key === '$regex' ? this.backToRegEx(val) : val;
     });
     // extras - extra methods to call besides find (sort, populate etc)
-    let extras = query.___;
+    let extras = query.___ || {};
     delete query.___;
     if (!model) {
       res.status(404);
