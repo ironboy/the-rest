@@ -182,7 +182,9 @@ class RestServer {
         let model = require(file);
         model.collection.collectionName && models.push(model);
       }
-      catch (e) { }
+      catch (e) { 
+        console.log('The file ' + file + ' does not contain a valid Mongoose model!');
+      }
     }
     return models;
   }
