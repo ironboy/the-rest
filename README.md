@@ -237,26 +237,26 @@ Given that we have the models **Elephant** and **Tiger**:
 
 ```js
  // Delete all tigers and elephants
-    await (await Tiger.find()).delete();
-    await (await Elephant.find()).delete();
+await (await Tiger.find()).delete();
+await (await Elephant.find()).delete();
 
-    // Create a tiger
-    let tigger = new Tiger({ name: 'Tigger' });
-    await tigger.save();
-    console.log('tigger', tigger, tigger.bark());
+// Create a tiger
+let tigger = new Tiger({ name: 'Tigger' });
+await tigger.save();
+console.log('tigger', tigger);
 
-    // Create an elephant that likes Tigger
-    let dumbo = new Elephant({ name: 'Dumbo', favoriteTiger: tigger});
-    await dumbo.save();
-    console.log('dumbo', dumbo);
+// Create an elephant that likes Tigger
+let dumbo = new Elephant({ name: 'Dumbo', favoriteTiger: tigger});
+await dumbo.save();
+console.log('dumbo', dumbo);
 
-    // All elephants populated with tigers
-    let elephants = await Elephant.find({}, {
-      populate: 'favoriteTiger', 
-      populateRevive: Tiger
-    });
+// All elephants populated with tigers
+let elephants = await Elephant.find({}, {
+  populate: 'favoriteTiger', 
+  populateRevive: Tiger
+});
 
-    console.log('elephants', elephants);
+console.log('elephants', elephants);
 ```
 
 **Note:** If you want to populate several fields, then *populate* should be a space delimited string and *populateRevive* an array of classes.
