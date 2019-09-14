@@ -233,7 +233,7 @@ Object.assign(Dog.prototype, {
 ### Population
 [Population with Mongoose](https://mongoosejs.com/docs/populate.html) is the equivalent of joins in SQL. When you use **the.rest** you can add the parameter **populateRevive** to revive populated fields as real **the.rest** frontend classes.
 
-Given that we have the models **Elephant** and **Tiger**:
+Given that we have the models **Elephant** and **Tiger** and *favoriteTiger: {type: mongoose.Schema.Types.ObjectId, ref: 'Tiger'}* in the *Elephant* schema:
 
 ```js
  // Delete all tigers and elephants
