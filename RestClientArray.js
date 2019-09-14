@@ -22,7 +22,6 @@ class RestClientArray extends Array {
       return { deletedCount: 0, n: 0, ok: 1 }
     }
     let ids = this.map(item => item._id);
-    console.log("THE", ids)
     let raw = await fetch(this[0].baseUrl + ids.join('&'), {
       method: 'DELETE'
     });

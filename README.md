@@ -215,12 +215,3 @@ let cats = Cats.find({name: /gar/i});
 // Delete them all at once
 await cats.delete();
 ```
-
-
-
-
-
-
-
-
-
