@@ -35,10 +35,29 @@ class RestClient {
   static async find(query = {}, methods = {}) {
     query = typeof query === 'object' ? query : { _id: query };
     query.___ = methods;
+    let popRevive = methods.populateRevive || [];
+    popRevive = popRevive instanceof Array ? popRevive : [popRevive];
+    delete methods.populateRevive;
     query = this.stringifyAndPreserveRegExps(query);
     let raw = await fetch(this.baseUrl + encodeURIComponent(query));
     let array = await raw.json();
     array = array.map(item => new this(item));
+    if(methods.populate){
+      let fieldsToPopulate = typeof methods.populate === 'string' ? methods.populate.split(' ') : methods.populate;
+      for(let item of array){
+        let i = 0;
+        for(let popField of fieldsToPopulate){
+          let wasArray = item[popField] instanceof Array;
+          let arr = [];
+          for(let subitem of wasArray ? item[popField] : [item[popField]]){
+            arr.push(subitem &&  popRevive[i] ? new popRevive[i](subitem) : subitem);
+          }
+          arr = wasArray ? newRestClientArray(...arr) : arr[0];
+          item[popField] = arr;
+          i++;
+        }
+      }
+    }
     return new RestClientArray(...array);
   }
 
