@@ -215,3 +215,48 @@ let cats = Cats.find({name: /gar/i});
 // Delete them all at once
 await cats.delete();
 ```
+
+### Adding methods to the classes
+If you want a dog who can bark and sit you simply add the methods to the **Dog** class like this:
+
+```js
+Object.assign(Dog.prototype, {
+  bark(){
+    return `Woof! I am ${this.name}!`;
+  },
+  sit(){
+    return `I, ${this.name}, am sitting. Give me candy!`;
+  }
+});
+```
+
+### Population
+[Population with Mongoose](https://mongoosejs.com/docs/populate.html) is the equivalent of joins in SQL. When you use **the.rest** you can add the parameter **populateRevive** to revive populated fields as real **the.rest** frontend classes.
+
+Given that we have the models **Elephant** and **Tiger**:
+
+```js
+ // Delete all tigers and elephants
+    await (await Tiger.find()).delete();
+    await (await Elephant.find()).delete();
+
+    // Create a tiger
+    let tigger = new Tiger({ name: 'Tigger' });
+    await tigger.save();
+    console.log('tigger', tigger, tigger.bark());
+
+    // Create an elephant that likes Tigger
+    let dumbo = new Elephant({ name: 'Dumbo', favoriteTiger: tigger});
+    await dumbo.save();
+    console.log('dumbo', dumbo);
+
+    // All elephants populated with tigers
+    let elephants = await Elephant.find({}, {
+      populate: 'favoriteTiger', 
+      populateRevive: Tiger
+    });
+
+    console.log('elephants', elephants);
+```
+
+**Note:** If you want to populate several fields, then *populate* should be a space delimited string and *populateRevive* an array of classes.
