@@ -299,7 +299,7 @@ The info object has the following structure:
   requestMethod: 'GET',
   modelName: 'Elephant',
   model: Model { Elephant },
-  query: { name: { '$regex': /Dum/i } },
+  query: { name: /Dum/i },
   extras: { populate: 'favoriteTiger' }
 }
 ```
@@ -339,3 +339,4 @@ delete Elephant.acl;
 * 1.0.17 - Getting rid of Express as a dependency (now a first argument to middleware conf)
 * 1.0.18 - 10.0.19 - Fixing bug/typo that made 1.0.17 unusable
 * 1.0.20 - 10.0.22 - Minor changes to README.
+* 1.0.23 - Reviving regexps on backend without $regex wrapper property

@@ -126,7 +126,7 @@ class RestServer {
     let q = decodeURIComponent(req.params.query || '{}');
     q = q.includes('{') ? q : `{"_id": "${q}"}`;
     let query = JSON.parse(q, (key, val) => {
-      return key === '$regex' ? this.backToRegEx(val) : val;
+      return val && val.$regex ? this.backToRegEx(val.$regex) : val;
     });
     // extras - extra methods to call besides find (sort, populate etc)
     let extras = query.___ || {};
