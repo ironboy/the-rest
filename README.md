@@ -288,7 +288,7 @@ The acl function recieves an info object and the Express request object. It will
 
 **Note:** If you choose to return something (preferably a string) it means you are not letting the request through. 
 
-You can combine this with moduels such as [express-session](https://www.npmjs.com/package/express-session) to read what user and user priviliges apply from **req.session**, but in the example above we simply do not allow population of **Elephants** regardless of user.
+You can combine this with modules such as [express-session](https://www.npmjs.com/package/express-session) to read what user and user priviliges apply from **req.session**, but in the example above we simply do not allow population of **Elephants** regardless of user.
 
 #### The info object
 The info object has the following structure: 
@@ -337,4 +337,4 @@ delete Elephant.acl;
 * 1.0.16 - Minor changes to README.
 * 1.0.17 - Getting rid of Express as a dependency (now a first argument to middleware conf)
 * 1.0.18 - 10.0.19 - Fixing bug/typo that made 1.0.17 unusable
-* 1.0.20 - Minor changes to README.
+* 1.0.20 - 10.0.21 - Minor changes to README.
