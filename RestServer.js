@@ -285,7 +285,7 @@ class RestServer {
 // Return Express middleware
 module.exports = function (_express, apiRoute, folderWithMongooseModels, acl) {
   let express = _express;
-  if(typeof express === 'function'){
+  if(typeof express !== 'function'){
     throw(new Error(
       'Starting with version 1.0.17 of the.rest you need ' + 
       'to provide the express module as the first argument to the the.rest!'
