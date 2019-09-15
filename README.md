@@ -13,7 +13,7 @@ npm install mongoose
 
 Then:
 ```
-npm install 'the.rest'
+npm install the.rest
 ```
 
 ## Backend setup
@@ -44,7 +44,7 @@ const app = express();
 // 2) the path to a folder with mongoose-models 
 //    Please Note: The path must be absolute
 const pathToModelFolder = path.join(__dirname, 'mongoose-models');
-app.use(RESTserver('/api', pathToModelFolder));
+app.use(RESTserver(express, '/api', pathToModelFolder));
 
 // Add other middleware you might need (express.static etc)
 
@@ -278,10 +278,10 @@ async function acl(info, req{
   // req.session and storing the logged in user in req.session.user
 }
  
-// Note the use of acl as a third parameter
+// Note the use of acl as a fourth parameter
 // when registrering the.rest as middleware
 const pathToModelFolder = path.join(__dirname, 'mongoose-models');
-app.use(RESTserver('/api', pathToModelFolder, acl));
+app.use(RESTserver(express, '/api', pathToModelFolder, acl));
 ```
 
 The acl function recieves an info object and the Express request object. It will be called for each request. 
@@ -335,3 +335,4 @@ delete Elephant.acl;
 * 1.0.14 - Minor changes to README.
 * 1.0.15 - Not sending res to acl anymore
 * 1.0.16 - Minor changes to README.
+* 1.0.17 - Getting rid of Express as an depdency (now a first argument to middleware conf)

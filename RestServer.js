@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const express = require('express');
+let express;
 
 class RestServer {
 
@@ -283,7 +283,14 @@ class RestServer {
 }
 
 // Return Express middleware
-module.exports = function (apiRoute, folderWithMongooseModels, acl) {
+module.exports = function (_express, apiRoute, folderWithMongooseModels, acl) {
+  let express = _express;
+  if(typeof express === 'function'){
+    throw(new Error(
+      'Starting with version 1.0.17 of the.rest you need ' + 
+      'to provide the express module as the first argument to the the.rest!'
+    ));
+  }
   apiRoute = apiRoute.replace(/\/*$/, '');
   let server = new RestServer(apiRoute, folderWithMongooseModels, acl);
   let pathToScript = path.join(__dirname, 'dist', 'as-script.js');
