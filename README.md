@@ -66,7 +66,7 @@ const schema = {
 module.exports = mongoose.model(modelName, schema);
 ```
 
-### If in a React/Vue etc. development environement - make proxy settings for yor node server
+### If in a React/Vue etc. development environment - make proxy settings for yor node server
 
 React: [Proxying API Requests in development ](https://create-react-app.dev/docs/proxying-api-requests-in-development)
 
@@ -266,7 +266,6 @@ If you want to protect certain routes/actions, based on user priviliges or other
 
 ### Backend
 ```js
-
 // See "Backend setup" above for details about basic setup
 
 // My ACL function
@@ -333,3 +332,4 @@ delete Elephant.acl;
 * 1.0.9 - Acl added and the RESTClientArray class subclassed for each entity.
 * 1.0.10 - 10.0.12  - Minor changes to README.
 * 1.0.13 - Explanation of the acl info object added to README.
+* 1.0.14 - Minor changes to README.
