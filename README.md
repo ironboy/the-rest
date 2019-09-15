@@ -105,7 +105,7 @@ You can also use named imports:
 import {Cat, Dog} from 'the.rest/dist/to-import';
 ```
 
-### Usage
+## Usage
 **the.rest** makes it really easy to *find*, *save* and *delete* Mongoose instance from your frontend code.
 
 The API is optimized to be used together with **await** (inside **async** functions).
@@ -261,7 +261,7 @@ console.log('elephants', elephants);
 
 **Note:** If you want to populate several fields, then *populate* should be a space delimited string and *populateRevive* an array of classes.
 
-### ACL (Access Control List) - protect certain routes/actions
+## ACL (Access Control List) - protect certain routes/actions
 If you want to protect certain routes/actions, based on user priviliges or other considerations you can do so by providing a third parameter - a function - to **the.rest** when you setup your backend.
 
 #### Backend
@@ -313,3 +313,4 @@ delete Elephant.acl;
 * 1.0.0 - 1.0.7 Early additions and bug fixes
 * 1.0.8 - PopulateRevive was introduced in 1.0.7
 * 1.0.9 - Acl added and the RESTClientArray class subclassed for each entity.
+* 1.0.10 - Minor changes to README.
