@@ -291,6 +291,22 @@ The acl function recieves an info object and the Express request and response ob
 
 You can combine this with moduels such as [express-session](https://www.npmjs.com/package/express-session) to read what user and user priviliges apply from **req.session**, but in the example above we simply do not allow population of **Elephants** regardless of user.
 
+#### The info object
+The info object has the following structure: 
+```js
+{
+  route: 'elephants',
+  requestMethod: 'GET',
+  modelName: 'Elephant',
+  model: Model { Elephant },
+  query: { name: { '$regex': /Dum/i } },
+  extras: { populate: 'favoriteTiger' }
+}
+```
+
+You get the base/entity route, the request method, the name of the mongoose model, the actual mongoose model object, the query and the *extras* (i.e. sort, limit, select, populate etc).
+
+This means you don't have to parse this yourself from *req.url*
 
 ### Frontend
 Acl is "invisible"/transparent by default on the frontend - you simply get empty answers when acl kicks in. But if you want to you can register a listener to pick up the acl messages from the backend:
@@ -316,3 +332,4 @@ delete Elephant.acl;
 * 1.0.8 - PopulateRevive was introduced in 1.0.7
 * 1.0.9 - Acl added and the RESTClientArray class subclassed for each entity.
 * 1.0.10 - 10.0.12  - Minor changes to README.
+* 1.0.13 - Explanation of the acl info object added to README.
