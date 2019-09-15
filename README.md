@@ -310,8 +310,9 @@ delete Elephant.acl;
 **Note:** The listener is just a property containing a function. If you want to be able to register several listeners to the same class, build your own event registration system based on this fact.
 
 <hr>
+
 ##### Change log
 * 1.0.0 - 1.0.7 Early additions and bug fixes
 * 1.0.8 - PopulateRevive was introduced in 1.0.7
 * 1.0.9 - Acl added and the RESTClientArray class subclassed for each entity.
-* 1.0.10 - 10.0.11  - Minor changes to README.
+* 1.0.10 - 10.0.12  - Minor changes to README.
