@@ -336,4 +336,4 @@ delete Elephant.acl;
 * 1.0.15 - Not sending res to acl anymore
 * 1.0.16 - Minor changes to README.
 * 1.0.17 - Getting rid of Express as an depdency (now a first argument to middleware conf)
-* 1.0.18 - Fixing bug/typo that made 1.0.17 unusable
+* 1.0.18 - 10.0.19 - Fixing bug/typo that made 1.0.17 unusable
