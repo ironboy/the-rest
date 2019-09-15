@@ -142,7 +142,7 @@ class RestServer {
       model: model,
       query: query,
       extras: extras
-    }, req, res);
+    }, req);
     if (aclResult) {
       res.json({ $acl: aclResult });
       return [];

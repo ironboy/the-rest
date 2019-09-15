@@ -284,7 +284,7 @@ const pathToModelFolder = path.join(__dirname, 'mongoose-models');
 app.use(RESTserver('/api', pathToModelFolder, acl));
 ```
 
-The acl function recieves an info object and the Express request and response objects. It will be called for each request. 
+The acl function recieves an info object and the Express request object. It will be called for each request. 
 
 **Note:** If you choose to return something (preferably a string) it means you are not letting the request through. 
 
@@ -328,8 +328,9 @@ delete Elephant.acl;
 
 ##### Change log
 * 1.0.0 - 1.0.7 Early additions and bug fixes
-* 1.0.8 - PopulateRevive was introduced in 1.0.7
+* 1.0.8 - PopulateRevive was introduced
 * 1.0.9 - Acl added and the RESTClientArray class subclassed for each entity.
 * 1.0.10 - 10.0.12  - Minor changes to README.
 * 1.0.13 - Explanation of the acl info object added to README.
 * 1.0.14 - Minor changes to README.
+* 1.0.15 - Not sending res to acl anymore
