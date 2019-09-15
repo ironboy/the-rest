@@ -153,12 +153,12 @@ let cats = await Cat.find({name:/gar/i});
 #### Use any of the extra methods in Mongoose queries
 Mongoose has a lot of [extra methods](https://mongoosejs.com/docs/api/query.html) for controlling queries (select, sort, limit, populate etc).
 
-Most of them will work from the frontend with **the.rest**. However the syntax is slighly differentm, but in an easy to learn way.
+Most of them will work from the frontend with **the.rest**. However the syntax is slighly different, but in an easy to learn way.
 
 A typical example of Mongoose syntax (backend):
 
 ```js
-await Cat.find({}).sort('name').limit(10).select('name');
+await Cat.find({}).sort('name').limit(10).select('name').exec();
 ```
 
 The same thing wtitten in **the.rest** syntax on the frontend:
@@ -184,7 +184,7 @@ await theCat.delete();
 ```
 
 ### Saving many things at once
-**The.rest** uses a special array subclass called **RESTRestClientArray** that have the methods **save** and **delete** - and lets you save/update/delete several instances at once.
+**The.rest** uses a special array subclass that have the methods **save** and **delete** - and lets you save/update/delete several instances at once.
 
 #### Create some new cats
 ```js
@@ -260,3 +260,56 @@ console.log('elephants', elephants);
 ```
 
 **Note:** If you want to populate several fields, then *populate* should be a space delimited string and *populateRevive* an array of classes.
+
+### ACL (Access Control List) - protect certain routes/actions
+If you want to protect certain routes/actions, based on user priviliges or other considerations you can do so by providing a third parameter - a function - to **the.rest** when you setup your backend.
+
+#### Backend
+```js
+
+// See "Backend setup" above for details about basic setup
+
+// My ACL function
+async function acl(info, req, res){
+  if(info.modelName === 'Elephant' && info.extras.populate){
+    return 'It is not allowed to populate Elephants.';
+  }
+  // Note: 
+  // If you are using npm express-session you can write rules based on
+  // req.session and storing the logged in user in req.session.user
+}
+ 
+// Note the use of acl as a third parameter
+// when registrering the.rest as middleware
+const pathToModelFolder = path.join(__dirname, 'mongoose-models');
+app.use(RESTserver('/api', pathToModelFolder, acl));
+```
+
+The acl function recieves an info object and the Express request and response objects. It will be called for each request. 
+
+**Note** If you choose to return something (preferably a string) it means you are not letting the request through. 
+
+You can combine this with moduels such as [express-session](https://www.npmjs.com/package/express-session) to read what user and user priviliges apply from **req.session**, but in the example above we simply do not allow population of **Elephants** regardless of user.
+
+
+#### Frontend
+Acl is "invisible"/transparent by default on the frontend - you simply get empty answers when acl kicks in. But if you want to you can register a listener to pick up the acl messages from the backend:
+
+```js
+Elephant.acl = message => {
+  console.warn(message);
+};
+```
+
+To unregister: 
+
+```js
+delete Elephant.acl;
+```
+
+**Note** The listener is just a property containing a function. If you want to be able to register several listeners to the same class, build your own event registration system based on this fact.
+
+##### Change log
+* 1.0.0 - 1.0.7 Early additions and bug fixes
+* 1.0.8 - PopulateRevive was introduced in 1.0.7
+* 1.0.9 - Acl added and the RESTClientArray class subclassed for each entity.

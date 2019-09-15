@@ -4,11 +4,7 @@ class RestClient {
     Object.assign(this, properties);
   }
 
-  static get array() {
-    return RestClientArray;
-  }
-
-  static baseUrlCalc(_class = this){
+  static baseUrlCalc(_class = this) {
     let r = _class.route;
     r += r.substr(-1) === '/' ? '' : '/';
     return r;
@@ -41,16 +37,20 @@ class RestClient {
     query = this.stringifyAndPreserveRegExps(query);
     let raw = await fetch(this.baseUrl + encodeURIComponent(query));
     let array = await raw.json();
+    if (array.$acl) {
+      typeof this.acl === 'function' && this.acl(array.$acl);
+      return new this.array();
+    }
     array = array.map(item => new this(item));
-    if(methods.populate){
+    if (methods.populate) {
       let fieldsToPopulate = typeof methods.populate === 'string' ? methods.populate.split(' ') : methods.populate;
-      for(let item of array){
+      for (let item of array) {
         let i = 0;
-        for(let popField of fieldsToPopulate){
+        for (let popField of fieldsToPopulate) {
           let wasArray = item[popField] instanceof Array;
           let arr = [];
-          for(let subitem of wasArray ? item[popField] : [item[popField]]){
-            arr.push(subitem &&  popRevive[i] ? new popRevive[i](subitem) : subitem);
+          for (let subitem of wasArray ? item[popField] : [item[popField]]) {
+            arr.push(subitem && popRevive[i] ? new popRevive[i](subitem) : subitem);
           }
           arr = wasArray ? newRestClientArray(...arr) : arr[0];
           item[popField] = arr;
@@ -58,7 +58,7 @@ class RestClient {
         }
       }
     }
-    return new RestClientArray(...array);
+    return new this.array(...array);
   }
 
   static async findOne(...args) {
@@ -74,6 +74,10 @@ class RestClient {
     });
     // update this with response
     let response = await raw.json();
+    if (response.$acl) {
+      typeof this.construcotr.acl === 'function' && this.constructor.acl(array.$acl);
+      return;
+    }
     Object.assign(this, response);
   }
 
@@ -81,7 +85,12 @@ class RestClient {
     let raw = await fetch(this.baseUrl + (this._id || ''), {
       method: 'DELETE'
     });
-    return await raw.json();
+    let respone = await raw.json();
+    if (response.$acl) {
+      typeof this.constructor.acl === 'function' && this.constructor.acl(array.$acl);
+      return { deletedCount: 0, n: 0, ok: 1 };
+    }
+    return response;
   }
 
 }

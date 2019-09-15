@@ -4,11 +4,12 @@ const express = require('express');
 
 class RestServer {
 
-  constructor(apiRoute, folderWithMongooseModels) {
+  constructor(apiRoute, folderWithMongooseModels, acl) {
     this.apiRoute = apiRoute;
     this.app = express();
     this.app.use(express.json());
     this.modelFolder = folderWithMongooseModels;
+    this.acl = acl || (() => { });
     this.start();
   }
 
@@ -27,7 +28,7 @@ class RestServer {
   }
 
   async get(req, res) {
-    let [model, query, extras] = this.getModelAndQuery(req, res);
+    let [model, query, extras] = await this.getModelAndQuery(req, res);
     if (!model) { return; }
     // perform the query
     let result = model.find(query);
@@ -37,7 +38,7 @@ class RestServer {
     for (let method in extras) {
       let args = extras[method];
       args = args instanceof Array ? args : [args];
-      if(!result[method]){ continue; }
+      if (!result[method]) { continue; }
       result = result[method](...args);
     }
     // wait for result, then send it
@@ -46,7 +47,7 @@ class RestServer {
   }
 
   async post(req, res) {
-    let [model] = this.getModelAndQuery(req, res);
+    let [model] = await this.getModelAndQuery(req, res);
     if (!model) { return; }
     if (req.body instanceof Array) {
       this.multiSave(model, req, res);
@@ -66,7 +67,7 @@ class RestServer {
   }
 
   async put(req, res) {
-    let [model] = this.getModelAndQuery(req, res);
+    let [model] = await this.getModelAndQuery(req, res);
     if (!model) { return; }
     // Find the instance
     let instance = await model.find({ _id: req.params._id });
@@ -84,7 +85,7 @@ class RestServer {
   }
 
   async delete(req, res) {
-    let [model] = this.getModelAndQuery(req, res);
+    let [model] = await this.getModelAndQuery(req, res);
     if (!model) { return; }
     // Delete the instance
     let result;
@@ -118,7 +119,7 @@ class RestServer {
     );
   }
 
-  getModelAndQuery(req, res) {
+  async getModelAndQuery(req, res) {
     // parse a request - find the mongoose model
     // and parse the query
     let model = this.models[req.params.entity];
@@ -133,6 +134,18 @@ class RestServer {
     if (!model) {
       res.status(404);
       res.json({ error: 'No such model!' });
+    }
+    let aclResult = await this.acl({
+      route: req.params.entity,
+      requestMethod: req.method,
+      modelName: model.modelName,
+      model: model,
+      query: query,
+      extras: extras
+    }, req, res);
+    if (aclResult) {
+      res.json({ $acl: aclResult });
+      return [];
     }
     return [model, query, extras];
   }
@@ -182,7 +195,7 @@ class RestServer {
         let model = require(file);
         model.collection.collectionName && models.push(model);
       }
-      catch (e) { 
+      catch (e) {
         console.log('The file ' + file + ' does not contain a valid Mongoose model!');
       }
     }
@@ -193,7 +206,7 @@ class RestServer {
     // read a folder recursively looking for js files
     let fs = require('fs');
     let base = { __count: 0, arr: [] };
-    if(!fs.existsSync(folderPath)){ return []; }
+    if (!fs.existsSync(folderPath)) { return []; }
     recursiveReadDir(folderPath);
     let resolve;
     let callback = x => resolve(x);
@@ -232,10 +245,21 @@ class RestServer {
       let modelName = this.models[route].modelName;
       code += `
         ${modelName}: class ${modelName} extends RestClient {
-          static get route(){ return '${this.apiRoute}/${route}'; }
+          static get route(){
+            return '${this.apiRoute}/${route}';
+          }
+          static get array(){
+            let _class = this;
+            this._arrayClass = this._arrayClass || class ${modelName}Array extends RestClientArray {
+              static get _class() {
+                return _class;
+              }
+            }
+            return this._arrayClass;
+          }
         },
       `;
-      named += `export const ${modelName} = _.${modelName};\n`; 
+      named += `export const ${modelName} = _.${modelName};\n`;
     }
     code += '\n}\n\n';
     let last = code.lastIndexOf(',');
@@ -259,11 +283,11 @@ class RestServer {
 }
 
 // Return Express middleware
-module.exports = function (apiRoute, folderWithMongooseModels) {
-  let server = new RestServer(apiRoute, folderWithMongooseModels);
+module.exports = function (apiRoute, folderWithMongooseModels, acl) {
+  apiRoute = apiRoute.replace(/\/*$/, '');
+  let server = new RestServer(apiRoute, folderWithMongooseModels, acl);
   let pathToScript = path.join(__dirname, 'dist', 'as-script.js');
   let first = true;
-  apiRoute = apiRoute.replace(/\/*$/, '');
   return (req, res, next) => {
     // add the REST server as a sub app to the app
     first && res.app.use(apiRoute, server.app);

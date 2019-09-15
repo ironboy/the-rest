@@ -10,6 +10,10 @@ class RestClientArray extends Array {
     });
     // update every item according to the response
     let response = await raw.json();
+    if (response.$acl) { 
+      typeof this.constructor._class.acl === 'function' && this.constructor._class.acl(array.$acl);
+      return;
+    }
     let i = 0;
     for (let item of response) {
       Object.assign(this[i++], item);
@@ -26,7 +30,12 @@ class RestClientArray extends Array {
       method: 'DELETE'
     });
     this.length = 0;
-    return await raw.json();
+    let response = await raw.json();
+    if (response.$acl) {
+      typeof this.constructor._class.acl === 'function' && this.constructor._class.acl(array.$acl);
+      return { deletedCount: 0, n: 0, ok: 1 };
+    }
+    return response;
   }
 
 }
