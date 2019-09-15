@@ -269,7 +269,7 @@ If you want to protect certain routes/actions, based on user priviliges or other
 // See "Backend setup" above for details about basic setup
 
 // My ACL function
-async function acl(info, req, res){
+async function acl(info, req{
   if(info.modelName === 'Elephant' && info.extras.populate){
     return 'It is not allowed to populate Elephants.';
   }
@@ -334,3 +334,4 @@ delete Elephant.acl;
 * 1.0.13 - Explanation of the acl info object added to README.
 * 1.0.14 - Minor changes to README.
 * 1.0.15 - Not sending res to acl anymore
+* 1.0.16 - Minor changes to README.
