@@ -264,7 +264,7 @@ console.log('elephants', elephants);
 ## ACL (Access Control List) - protect certain routes/actions
 If you want to protect certain routes/actions, based on user priviliges or other considerations you can do so by providing a third parameter - a function - to **the.rest** when you setup your backend.
 
-#### Backend
+### Backend
 ```js
 
 // See "Backend setup" above for details about basic setup
@@ -287,12 +287,12 @@ app.use(RESTserver('/api', pathToModelFolder, acl));
 
 The acl function recieves an info object and the Express request and response objects. It will be called for each request. 
 
-**Note** If you choose to return something (preferably a string) it means you are not letting the request through. 
+**Note:** If you choose to return something (preferably a string) it means you are not letting the request through. 
 
 You can combine this with moduels such as [express-session](https://www.npmjs.com/package/express-session) to read what user and user priviliges apply from **req.session**, but in the example above we simply do not allow population of **Elephants** regardless of user.
 
 
-#### Frontend
+### Frontend
 Acl is "invisible"/transparent by default on the frontend - you simply get empty answers when acl kicks in. But if you want to you can register a listener to pick up the acl messages from the backend:
 
 ```js
@@ -307,10 +307,11 @@ To unregister:
 delete Elephant.acl;
 ```
 
-**Note** The listener is just a property containing a function. If you want to be able to register several listeners to the same class, build your own event registration system based on this fact.
+**Note:** The listener is just a property containing a function. If you want to be able to register several listeners to the same class, build your own event registration system based on this fact.
 
+<hr>
 ##### Change log
 * 1.0.0 - 1.0.7 Early additions and bug fixes
 * 1.0.8 - PopulateRevive was introduced in 1.0.7
 * 1.0.9 - Acl added and the RESTClientArray class subclassed for each entity.
-* 1.0.10 - Minor changes to README.
+* 1.0.10 - 10.0.11  - Minor changes to README.
