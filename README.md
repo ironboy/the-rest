@@ -26,7 +26,7 @@ Here is an example of fairly typical backend setup
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-const RESTserver = require('the.rest');
+const theRest = require('the.rest');
 
 // Connect to MongoDB via Mongoose
 mongoose.connect('mongodb://localhost/db-name', {
@@ -39,12 +39,13 @@ const db = mongoose.connection;
 const app = express();
 
 // ..and install the.rest as middleware
-// you need to tell it two things:
-// 1) the base route to its api
-// 2) the path to a folder with mongoose-models 
-//    Please Note: The path must be absolute
+// Arguments/configuration:
+// 1) The express library
+// 2) The base route for the REST api to create
+// 3) The path to a folder with mongoose-models 
+//    Please Note: This path must be absolute
 const pathToModelFolder = path.join(__dirname, 'mongoose-models');
-app.use(RESTserver(express, '/api', pathToModelFolder));
+app.use(theRest(express, '/api', pathToModelFolder));
 
 // Add other middleware you might need (express.static etc)
 
@@ -111,7 +112,7 @@ import {Cat, Dog} from 'the.rest/dist/to-import';
 The API is optimized to be used together with **await** (inside **async** functions).
 
 ### Creating things
-Creating and saving new instance are simple:
+Creating and saving a new instance is simple:
 
 ```js
 // Create a new cat
@@ -281,7 +282,7 @@ async function acl(info, req{
 // Note the use of acl as a fourth parameter
 // when registrering the.rest as middleware
 const pathToModelFolder = path.join(__dirname, 'mongoose-models');
-app.use(RESTserver(express, '/api', pathToModelFolder, acl));
+app.use(theRest(express, '/api', pathToModelFolder, acl));
 ```
 
 The acl function recieves an info object and the Express request object. It will be called for each request. 
@@ -337,4 +338,4 @@ delete Elephant.acl;
 * 1.0.16 - Minor changes to README.
 * 1.0.17 - Getting rid of Express as a dependency (now a first argument to middleware conf)
 * 1.0.18 - 10.0.19 - Fixing bug/typo that made 1.0.17 unusable
-* 1.0.20 - 10.0.21 - Minor changes to README.
+* 1.0.20 - 10.0.22 - Minor changes to README.

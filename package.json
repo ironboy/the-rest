@@ -2,7 +2,7 @@
   "name": "the.rest",
   "description": "A flexible and easy-to-use REST-backend/ORM-frontend for Mongoose.",
   "author": "Thomas Frank <thomas@nodebite.se> (http://nodebite.se)",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "main": "index.js",
   "repository": {
     "type": "git",
