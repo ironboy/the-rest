@@ -168,7 +168,7 @@ The same thing witten in **the.rest** syntax on the frontend:
 await Cat.find({}).sort('name').limit(10).select('name');
 ```
 ##### Alternate syntax
-If you are targeting old browsers/Internet Explorer, that do not support the [Proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), you have to use an alternate syntax, were you replace the method chains with a second argument:
+If you are targeting old browsers/Internet Explorer, that do not support the [Proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), you have to use an alternate syntax, where you replace the method chains with a second argument:
 
 ```js
 await Cat.find({}, {sort: 'name', limit: 10, select: 'name'});
@@ -349,3 +349,4 @@ delete Elephant.acl;
 * 1.0.24-1.0.26 - Introducing method chain syntax
 * 1.0.27 - Temporarily reverting method chain syntax
 * 1.0.28 - Reintroducing the method chain syntax
+* 1.0.29 - Minor changes to README.
