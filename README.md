@@ -154,7 +154,7 @@ let cats = await Cat.find({name:/gar/i});
 #### Use any of the extra methods in Mongoose queries
 Mongoose has a lot of [extra methods](https://mongoosejs.com/docs/api/query.html) for controlling queries (select, sort, limit, populate etc).
 
-Most of them will work from the frontend with **the.rest**. You can use the same syntax as normal Mongoose (writing method chains), execept that you leave out the exec:
+Most of them will work from the frontend with **the.rest**. You can use the same syntax as in normal Mongoose (writing method chains), execept that you leave out the exec call.
 
 A typical example of Mongoose syntax (backend):
 
@@ -162,9 +162,13 @@ A typical example of Mongoose syntax (backend):
 await Cat.find({}).sort('name').limit(10).select('name').exec();
 ```
 
-The same thing written in **the.rest** syntax on the frontend:
+The same thing witten in **the.rest** syntax on the frontend:
 
-
+```js
+await Cat.find({}).sort('name').limit(10).select('name');
+```
+##### Alternate syntax
+If you are targeting old browsers/Internet Explorer, that do not support the [Proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), you have to use an alternate syntax, were you replace the method chains with a second argument:
 
 ```js
 await Cat.find({}, {sort: 'name', limit: 10, select: 'name'});
@@ -254,15 +258,15 @@ await dumbo.save();
 console.log('dumbo', dumbo);
 
 // All elephants populated with tigers
-let elephants = await Elephant.find({}, {
-  populate: 'favoriteTiger', 
-  populateRevive: Tiger
-});
+let elephants = await Elephant
+  .find({})
+  .populate('favoriteTiger') 
+  .populateRevive(Tiger);
 
 console.log('elephants', elephants);
 ```
 
-**Note:** If you want to populate several fields, then *populate* should be a space delimited string and *populateRevive* an array of classes.
+**Note:** If you want to populate several fields, then call *populate* with a a space delimited string and *populateRevive* with an array of classes.
 
 ## ACL (Access Control List) - protect certain routes/actions
 If you want to protect certain routes/actions, based on user priviliges or other considerations you can do so by providing a third parameter - a function - to **the.rest** when you setup your backend.
@@ -344,3 +348,4 @@ delete Elephant.acl;
 * 1.0.23 - Reviving regexps on backend without $regex wrapper property
 * 1.0.24-1.0.26 - Introducing method chain syntax
 * 1.0.27 - Temporarily reverting method chain syntax
+* 1.0.28 - Reintroducing the method chain syntax

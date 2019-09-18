@@ -29,12 +29,14 @@ class RestClient {
   }
 
   static find(x, y) {
-    // || true - temporarily reverting proxy method chain
-    if (y || typeof Proxy === "undefined" || true) {
-      return this._find(x, y);
+    if (y || typeof Proxy === "undefined") {
+      return this.findTrad(x, y);
     }
     else {
-      return proxyMethodChain(false, y => this._find(x, y));
+      let pmc = new ProxyMethodChain();
+      return pmc.create(async resolve => {
+        resolve(await this._find(x, pmc.mem));
+      });
     }
   }
 

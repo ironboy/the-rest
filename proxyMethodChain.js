@@ -1,29 +1,28 @@
-const proxyMethodChain = (() => {
-  
-    let mem = {}, propMem, callback;
-  
-    function getty(target, prop) {
-      if (prop === 'then') {
-        return callback(mem);
-      }
-      else {
-        propMem = prop;
-        return proxyMethodChain(func);
-      }
-    }
-  
-    function func(...args) {
-      mem[propMem] = args.length === 1 ? args[0] : args;
-      return proxyMethodChain(func);
-    }
-  
-    function proxyMethodChain(obj, cb) {
-      obj = obj || func;
-      callback = cb || callback;
-      mem = cb ? {} : mem;
-      return new Proxy(obj, { get: getty });
-    }
+class ProxyMethodChain {
 
-    return proxyMethodChain;
-  
-  })();
+  constructor(){
+    this.mem = {};
+  }
+
+  create(callback) {
+    this.callback = callback ? callback : this.callback;
+    this.mem = callback ? {} : this.mem;
+    return new Proxy((...x) => this.func(...x), { get: (...x) => this.getter(...x)});
+  }
+
+  getter(target, prop){
+    if (prop === 'then') {
+      return this.callback;
+    }
+    else {
+      this.propMem = prop;
+      return this.create();
+    }
+  }
+
+  func(...args) {
+    this.mem[this.propMem] = args.length === 1 ? args[0] : args;
+    return this.create();
+  }
+
+}
