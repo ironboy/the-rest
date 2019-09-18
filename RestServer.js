@@ -235,7 +235,7 @@ class RestServer {
   writeFrontendClassesFile() {
     let pathToCode = path.join(__dirname, 'dist', 'to-import.js');
     let pathToScript = path.join(__dirname, 'dist', 'as-script.js');
-    let scriptCode = fs.readFileSync(path.join(__dirname, 'proxyMehodChain.js'), 'utf-8');
+    let scriptCode = fs.readFileSync(path.join(__dirname, 'proxyMethodChain.js'), 'utf-8');
     scriptCode += '\n\n' + fs.readFileSync(path.join(__dirname, 'RestClientArray.js'), 'utf-8');
     scriptCode += '\n\n' + fs.readFileSync(path.join(__dirname, 'RestClient.js'), 'utf-8');
     let named = '';

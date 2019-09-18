@@ -346,4 +346,4 @@ delete Elephant.acl;
 * 1.0.18 - 10.0.19 - Fixing bug/typo that made 1.0.17 unusable
 * 1.0.20 - 10.0.22 - Minor changes to README.
 * 1.0.23 - Reviving regexps on backend without $regex wrapper property
-* 1.0.24 - Introducing method chain syntax
+* 1.0.24-1.0.25 - Introducing method chain syntax
