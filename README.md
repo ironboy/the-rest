@@ -154,7 +154,7 @@ let cats = await Cat.find({name:/gar/i});
 #### Use any of the extra methods in Mongoose queries
 Mongoose has a lot of [extra methods](https://mongoosejs.com/docs/api/query.html) for controlling queries (select, sort, limit, populate etc).
 
-Most of them will work from the frontend with **the.rest**. However the syntax is slighly different, but in an easy to learn way.
+Most of them will work from the frontend with **the.rest**. You can use the same syntax as normal Mongoose (writing method chains), execept that you leave out the exec:
 
 A typical example of Mongoose syntax (backend):
 
@@ -163,6 +163,12 @@ await Cat.find({}).sort('name').limit(10).select('name').exec();
 ```
 
 The same thing wtitten in **the.rest** syntax on the frontend:
+
+```js
+await Cat.find({}).sort('name').limit(10).select('name');
+```
+##### Alternate syntax
+If you are targeting old browsers that do not support the JS [Proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) (think Internet Explorer) you have to use another alternate syntax, were you replace the method chains with a second argument:
 
 ```js
 await Cat.find({}, {sort: 'name', limit: 10, select: 'name'});
@@ -340,3 +346,4 @@ delete Elephant.acl;
 * 1.0.18 - 10.0.19 - Fixing bug/typo that made 1.0.17 unusable
 * 1.0.20 - 10.0.22 - Minor changes to README.
 * 1.0.23 - Reviving regexps on backend without $regex wrapper property
+* 1.0.24 - Introducing method chain syntax

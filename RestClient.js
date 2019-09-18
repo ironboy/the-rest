@@ -28,7 +28,16 @@ class RestClient {
     );
   }
 
-  static async find(query = {}, methods = {}) {
+  static find(x, y) {
+    if (y || typeof Proxy === "undefined") {
+      return this._find(x, y);
+    }
+    else {
+      return proxyMethodChain(func, y => this._find(x, y));
+    }
+  }
+
+  static async _find(query = {}, methods = {}) {
     query = typeof query === 'object' ? query : { _id: query };
     query.___ = methods;
     let popRevive = methods.populateRevive || [];
