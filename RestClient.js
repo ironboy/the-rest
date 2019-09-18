@@ -33,7 +33,7 @@ class RestClient {
       return this._find(x, y);
     }
     else {
-      return proxyMethodChain(func, y => this._find(x, y));
+      return proxyMethodChain(false, y => this._find(x, y));
     }
   }
 

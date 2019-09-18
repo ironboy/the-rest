@@ -17,7 +17,8 @@ const proxyMethodChain = (() => {
       return proxyMethodChain(func);
     }
   
-    function proxyMethodChain(obj = {}, cb) {
+    function proxyMethodChain(obj, cb) {
+      obj = obj || func;
       callback = cb || callback;
       mem = cb ? {} : mem;
       return new Proxy(obj, { get: getty });
