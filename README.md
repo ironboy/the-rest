@@ -162,13 +162,9 @@ A typical example of Mongoose syntax (backend):
 await Cat.find({}).sort('name').limit(10).select('name').exec();
 ```
 
-The same thing wtitten in **the.rest** syntax on the frontend:
+The same thing written in **the.rest** syntax on the frontend:
 
-```js
-await Cat.find({}).sort('name').limit(10).select('name');
-```
-##### Alternate syntax
-If you are targeting old browsers that do not support the JS [Proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) (think Internet Explorer) you have to use another alternate syntax, were you replace the method chains with a second argument:
+
 
 ```js
 await Cat.find({}, {sort: 'name', limit: 10, select: 'name'});
@@ -347,3 +343,4 @@ delete Elephant.acl;
 * 1.0.20 - 10.0.22 - Minor changes to README.
 * 1.0.23 - Reviving regexps on backend without $regex wrapper property
 * 1.0.24-1.0.26 - Introducing method chain syntax
+* 1.0.27 - Temporarily reverting method chain syntax

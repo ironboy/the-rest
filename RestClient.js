@@ -29,7 +29,8 @@ class RestClient {
   }
 
   static find(x, y) {
-    if (y || typeof Proxy === "undefined") {
+    // || true - temporarily reverting proxy method chain
+    if (y || typeof Proxy === "undefined" || true) {
       return this._find(x, y);
     }
     else {
