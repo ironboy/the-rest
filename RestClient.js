@@ -97,7 +97,7 @@ class RestClient {
     let raw = await fetch(this.baseUrl + (this._id || ''), {
       method: 'DELETE'
     });
-    let respone = await raw.json();
+    let response = await raw.json();
     if (response.$acl) {
       typeof this.constructor.acl === 'function' && this.constructor.acl(array.$acl);
       return { deletedCount: 0, n: 0, ok: 1 };

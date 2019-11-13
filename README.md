@@ -367,3 +367,4 @@ app.use(theRest(express, '/api', pathToModelFolder, null, {
 * 1.0.28 - Reintroducing the method chain syntax
 * 1.0.29 - Minor changes to README.
 * 1.0.30 - Added possibility to add frontend classes that do not have Mongoose/the.rest backend.
+* 1.0.31 - Fixed a bug in DELETE routes
