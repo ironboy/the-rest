@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 let express;
+let nonMongooseBasedRoutes;
 
 class RestServer {
 
   constructor(apiRoute, folderWithMongooseModels, acl) {
     this.apiRoute = apiRoute;
     this.app = express();
-    this.app.use(express.json());
+    this.app.use(express.json({ limit: '1mb' }));
     this.modelFolder = folderWithMongooseModels;
     this.acl = acl || (() => { });
     this.start();
@@ -242,8 +243,8 @@ class RestServer {
     let code = `
       const _ = {
     `;
-    for (let route in this.models) {
-      let modelName = this.models[route].modelName;
+    for (let route in { ...this.models, ...nonMongooseBasedRoutes }) {
+      let modelName = this.models[route] ? this.models[route].modelName : nonMongooseBasedRoutes[route];
       code += `
         ${modelName}: class ${modelName} extends RestClient {
           static get route(){
@@ -284,11 +285,12 @@ class RestServer {
 }
 
 // Return Express middleware
-module.exports = function (_express, apiRoute, folderWithMongooseModels, acl) {
+module.exports = function (_express, apiRoute, folderWithMongooseModels, acl, _nonMongooseBasedRoutes) {
   express = _express;
-  if(typeof express !== 'function'){
-    throw(new Error(
-      'Starting with version 1.0.17 of the.rest you need ' + 
+  nonMongooseBasedRoutes = _nonMongooseBasedRoutes;
+  if (typeof express !== 'function') {
+    throw (new Error(
+      'Starting with version 1.0.17 of the.rest you need ' +
       'to provide the express module as the first argument to the the.rest!'
     ));
   }

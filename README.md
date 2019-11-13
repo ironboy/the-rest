@@ -269,7 +269,7 @@ console.log('elephants', elephants);
 **Note:** If you want to populate several fields, then call *populate* with a a space delimited string and *populateRevive* with an array of classes.
 
 ## ACL (Access Control List) - protect certain routes/actions
-If you want to protect certain routes/actions, based on user priviliges or other considerations you can do so by providing a third parameter - a function - to **the.rest** when you setup your backend.
+If you want to protect certain routes/actions, based on user priviliges or other considerations you can do so by providing a fourth parameter - a function - to **the.rest** when you setup your backend.
 
 ### Backend
 ```js
@@ -331,6 +331,22 @@ delete Elephant.acl;
 
 **Note:** The listener is just a property containing a function. If you want to be able to register several listeners to the same class, build your own event registration system based on this fact.
 
+## Adding non-mongoose based routes
+Sometimes you need to write special routes yourself on the backend, that are not based on Mongoose-models. A common example would be routes for login (- *could* be done asm *POST /api/login* logs in, *DELETE /api/login* logs out and *GET /api/login* checks who is logged in?).
+
+So in the backend you would write these routes by hand, as opposed to automatically created REST routes from **the.rest**. However you might still want to use a **the.rest** based class on the frontend.
+
+You can send a fifth parameter to the rest to do this! It should be an object where the keys are routes and their values are the name of the 'model'/class you want to be created on the front-end.
+
+```js
+app.use(theRest(express, '/api', pathToModelFolder, null, {
+  'login': 'Login'
+}));
+```
+
+
+
+
 <hr>
 
 ##### Change log
@@ -350,3 +366,4 @@ delete Elephant.acl;
 * 1.0.27 - Temporarily reverting method chain syntax
 * 1.0.28 - Reintroducing the method chain syntax
 * 1.0.29 - Minor changes to README.
+* 1.0.30 - Added possibility to add frontend classes that do not have Mongoose/the.rest backend.
